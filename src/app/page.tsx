@@ -1,9 +1,10 @@
-import HelloWorld from "@/components/hello-world";
+import Toggle from "@/components/toggle-component";
+
 
 export default function Home() {
   return (
     <main className='gfe-main'>
-      <HelloWorld />
+      <Toggle />
     </main>
   );
 }
