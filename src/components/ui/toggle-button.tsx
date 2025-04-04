@@ -3,17 +3,33 @@ import { VariantProps, cva } from "class-variance-authority";
 import { forwardRef } from "react";
 
 const toggleVariants = cva(
-  "relative inline-flex items-center rounded-full transition-colors focus:outline-none focus-visible:ring-2",
+  "relative inline-flex items-center rounded-full transition-colors focus:outline-none",
   {
     variants: {
-
       size: {
-        sm: "h-5 w-9", // 20px height, 36px width
-        md: "h-6 w-11", // 24px height, 44px width
+        sm: "h-5 w-9",
+        md: "h-6 w-11",
+      },
+      variant: {
+        active: [
+          // All active styles bundled together
+          "bg-indigo-700",
+          "hover:bg-indigo-800",
+          "focus:bg-indigo-800 focus:border focus:border-indigo-600 focus:shadow-[0_0px_0px_4px_rgba(68,76,231,0.12)]",
+          "disabled:cursor-not-allowed disabled:opacity-50"
+        ],
+        inactive: [
+          // All inactive styles bundled together
+          "bg-gray-200",
+          "hover:bg-gray-300",
+          "focus:bg-gray-300 focus:border focus:border-gray-400 focus:shadow-[0_0px_0px_4px_rgba(157,164,174,0.20)]",
+          "disabled:cursor-not-allowed disabled:bg-gray-100"
+        ]
       }
     },
     defaultVariants: {
-      size: "md"
+      size: "md",
+      variant: "inactive"
     }
   }
 );
@@ -23,8 +39,8 @@ const thumbVariants = cva(
   {
     variants: {
       size: {
-        sm: ["h-3.5 w-3.5", "translate-x-0.5 data-[checked=true]:translate-x-5"],
-        md: ["h-5 w-5", "translate-x-0.5 data-[checked=true]:translate-x-5"],
+        sm: ["h-4 w-4", "translate-x-0.5 data-[checked=true]:translate-x-[1.15rem]"],
+        md: ["h-5 w-5", "translate-x-0.5 data-[checked=true]:translate-x-[1.4rem]"],
       }
     },
     defaultVariants: {
@@ -61,29 +77,14 @@ const ToggleSwitch = forwardRef<HTMLButtonElement, ToggleSwitchProps>((props, re
       ref={ref}
       role="switch"
       aria-checked={checked}
-      data-state={checked ? "checked" : "unchecked"}
       disabled={disabled}
       onClick={handleToggle}
       className={cn(
-        toggleVariants({ size }),
-        // Base/default states
-        checked ? "bg-indigo-700" : "bg-gray-200",
-
-        // Hover states
-        checked ? "hover:bg-indigo-800" : "hover:bg-gray-300",
-
-        // Focus states
-        checked
-          ? "focus:bg-indigo-800 focus:border focus:border-indigo-600 focus:shadow-[0_0px_0px_4px_rgba(68,76,231,0.12)]"
-          : "focus:bg-gray-300 focus:border focus:border-gray-400 focus:shadow-[0_0px_0px_4px_rgba(157,164,174,0.20)]",
-
-        // Disabled state
-        disabled
-          ? checked
-            ? "disabled:cursor-not-allowed disabled:opacity-50"
-            : "disabled:cursor-not-allowed disabled:bg-gray-100"
-          : "cursor-pointer",
-
+        toggleVariants({
+          size,
+          variant: checked ? "active" : "inactive"
+        }),
+        disabled ? "cursor-not-allowed" : "cursor-pointer",
         className
       )}
       {...rest}
